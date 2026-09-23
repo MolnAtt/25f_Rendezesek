@@ -9,6 +9,7 @@ namespace _25f_Rendezesek
 {
 	internal class Program
 	{
+		#region Maximumkiválasztásos rendezés
 		static void Maximumkiválasztásos_rendezés<T>(List<T> l, Func<T,T, int> comparator)
 		{
 			//int j = l.Count-1;
@@ -26,14 +27,12 @@ namespace _25f_Rendezesek
 			}
 
 		}
-
 		static void Csere<T>(List<T> l , int i , int j)
 		{
 			T temp = l[i];
 			l[i] = l[j];
 			l[j] = temp;
 		}
-
 		static int Maximum_helye<T>(List<T> l, int j, Func<T, T, int> comparator)
 		{
 			int legjobb_helye = 0;
@@ -46,13 +45,87 @@ namespace _25f_Rendezesek
 			}
 			return legjobb_helye;
 		}
+		#endregion
+
+		#region Beszúró rendezés
+
+		static void Beszúró_rendezés<T>(List<T> l, Func<T, T, int> comparator)
+		{
+			for (int i = 1; i < l.Count; i++)
+			{
+				int j = Helye_a_balralévők_közt(l,i, comparator);
+				Átemelés(l, i, j);
+			}
+		}
+		static int Helye_a_balralévők_közt<T>(List<T> l, int i, Func<T, T, int> comparator)
+		{
+			int j = i - 1;
+			while (0 <= j && comparator(l[j], l[i]) > 0)
+			{
+				j--;
+			}
+			return j + 1;
+		}
+		/** /
+		Függvény Helye_a_balralévők_közt(l:Lista[Egész], i:Egész) : Egész
+			Lokális változók: 
+				j: Egész
+			j:=i-1
+			Ciklus amíg 1<=j és l[i] < l[j]:
+				j:=j-1
+			Ciklus vége
+			Helye_a_balralévők_közt := j+1
+		Függvény vége
+		/**/
+		static void Átemelés<T>(List<T> l, int i, int j){
+			T temp = l[i];
+			for (int k = i; j < k; k--)
+			{
+				l[k] = l[k - 1];
+			}
+			l[j] = temp;
+		}
+
+		/** /
+		Eljárás Átemelés (l:Lista[Egész], i:Egész, j:Egész)
+			Lokális változó:
+				temp: Egész
+			temp := l[i]
+			Ciklus k:=i-től j<k; -1-esével
+				l[k] := l[k-1]
+			Ciklus vége
+			l[j] := temp			
+		Eljárás vége
+		/**/
+
+		#endregion
+
+		#region Buborékos rendezés
+
+		static void Gagyi_buborékos_rendezés<T>(List<T> l, Func<T, T, int> comparator)
+		{
+			for (int eddig = l.Count; 1 <= eddig; eddig--)
+			{
+				for (int i = 1; i < eddig; i++)
+				{
+					if (comparator(l[i-1], l[i]) > 0)
+					{
+						Csere(l, i, i - 1);
+					}
+				}
+			}
+		}
+
+		#endregion
 
 		static void Main(string[] args)
 		{
 			List<int> lista = new List<int> { 1, 3, 4, 56, 2, 2, 3, 45, 5, 2, 3, 4, 5, 9, 6, 6, 2, 123, 4, 1, 456, 0, 2, 2, 34, 5 };
 
 			Console.WriteLine(string.Join(", ", lista));
-			Maximumkiválasztásos_rendezés(lista, (x,y) => x.CompareTo(y));
+			//Maximumkiválasztásos_rendezés(lista, (x, y) => x.CompareTo(y));
+			//Beszúró_rendezés(lista, (x, y) => x.CompareTo(y));
+			Gagyi_buborékos_rendezés(lista, (x, y) => x.CompareTo(y));
 			Console.WriteLine(string.Join(", ", lista));
 
 			// rendezési szempont = comparator
