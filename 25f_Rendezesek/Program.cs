@@ -27,7 +27,7 @@ namespace _25f_Rendezesek
 			}
 
 		}
-		static void Csere<T>(List<T> l , int i , int j)
+		static void Csere<T>(List<T> l, int i, int j)
 		{
 			T temp = l[i];
 			l[i] = l[j];
@@ -118,14 +118,85 @@ namespace _25f_Rendezesek
 
 		#endregion
 
+		#region gyorsrendezés
+		static void Gyorsrendezés<T>(List<T> l, Func<T,T,int> comparator) => Gyorsrendezés(l, 0, l.Count-1, comparator);
+		static void Gyorsrendezés<T>(List<T> l, int e, int v, Func<T,T,int> comparator)
+		{
+			if (e < v)
+			{
+				int i = Partíciókra_bontás(l, e, v, comparator); // ettől jobbra már csak nagyobbak, balra meg csak kisebbek vannak!								   
+				Gyorsrendezés(l, e, i - 1, comparator); // oszd meg és uralkodj! / divide et impera !
+				Gyorsrendezés(l, i + 1, v, comparator);
+			}
+		}
+
+		static int Partíciókra_bontás<T>(List<T> l, int e, int v, Func<T,T,int> comparator)
+		{
+			int i = e;
+			int j = v; //  virágos kalap
+
+			while (i != j)
+			{
+				//if (i < j != l[i] < l[j])
+				if (i < j != (comparator(l[i],l[j]) == -1) )
+				{
+					//Csere(l, i, j); 
+					//Csere(ref i, ref j); // pl C++-ban így kell
+					(l[i], l[j]) = (l[j], l[i]);
+					(i, j) = (j, i);
+				}
+				//j += i < j ? -1 : 1;
+				j += i.CompareTo(j);
+			}
+			return i; // vagy j
+		}
+
+		static void Csere(ref int i, ref int j)
+		{
+			Console.WriteLine($"i={i}, j={j}");
+			int temp = i;
+			i = j;
+			j = temp;
+			Console.WriteLine($"i={i}, j={j}");
+		}
+
+		#endregion
+
+		#region összefésüléses rendezés
+
+		static void MergeSort(List<int> lista, int e, int v)
+		{
+			if (lista.Count <= 1)
+				return;
+
+			int k = lista.Count / 2;
+			MergeSort(lista, e, k);
+			MergeSort(lista, k+1, v);
+			Merge(lista, e, k, v);
+		}
+		static void Merge(List<int> lista, int e, int k, int v)
+		{
+
+		}
+		#endregion
+
 		static void Main(string[] args)
 		{
+			int p = 5;
+			int q = 7;
+			Console.WriteLine($"a={p}, b={q}");
+			Csere(ref p, ref q);
+			Console.WriteLine($"a={p}, b={q}");
+
+
+
 			List<int> lista = new List<int> { 1, 3, 4, 56, 2, 2, 3, 45, 5, 2, 3, 4, 5, 9, 6, 6, 2, 123, 4, 1, 456, 0, 2, 2, 34, 5 };
 
 			Console.WriteLine(string.Join(", ", lista));
 			//Maximumkiválasztásos_rendezés(lista, (x, y) => x.CompareTo(y));
 			//Beszúró_rendezés(lista, (x, y) => x.CompareTo(y));
-			Gagyi_buborékos_rendezés(lista, (x, y) => x.CompareTo(y));
+			//Gagyi_buborékos_rendezés(lista, (x, y) => x.CompareTo(y));
+			Gyorsrendezés(lista, (x, y) => x.CompareTo(y));
 			Console.WriteLine(string.Join(", ", lista));
 
 			// rendezési szempont = comparator
