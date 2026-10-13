@@ -182,17 +182,17 @@ namespace _25f_Rendezesek
 
 		static List<int> Unió(List<int> A, List<int> B)
 		{
-
+			throw new NotImplementedException();
 		}
 
 		static List<int> Metszet(List<int> A, List<int> B)
 		{
-
+			throw new NotImplementedException();
 		}
 
 		static List<int> Különbség(List<int> A, List<int> B)
 		{
-
+			throw new NotImplementedException();
 		}
 
 		static void Main(string[] args)
