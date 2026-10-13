@@ -180,6 +180,21 @@ namespace _25f_Rendezesek
 		}
 		#endregion
 
+		static List<int> Unió(List<int> A, List<int> B)
+		{
+
+		}
+
+		static List<int> Metszet(List<int> A, List<int> B)
+		{
+
+		}
+
+		static List<int> Különbség(List<int> A, List<int> B)
+		{
+
+		}
+
 		static void Main(string[] args)
 		{
 			int p = 5;
@@ -190,14 +205,29 @@ namespace _25f_Rendezesek
 
 
 
-			List<int> lista = new List<int> { 1, 3, 4, 56, 2, 2, 3, 45, 5, 2, 3, 4, 5, 9, 6, 6, 2, 123, 4, 1, 456, 0, 2, 2, 34, 5 };
+			List<int> l1 = new List<int> { 1, 3, 4, 56, 2, 2, 3, 45, 5, 2, 3, 4, 5, 9, 6, 6, 2, 123, 4, 1, 456, 0, 2, 2, 34, 5 };
 
-			Console.WriteLine(string.Join(", ", lista));
+			List<int> l2 = new List<int> { 5, 8, 9, 3, 4, 5, 8, 3, 1, 2, 3, 4, 6, 8, 123, 34, 6, 234, 56, 1 };
+
+			Gyorsrendezés(l1, (x, y) => x.CompareTo(y));
+			Gyorsrendezés(l2, (x, y) => x.CompareTo(y));
+
+			List<int> l3 = Unió(l1, l2);
+			List<int> l4 = Metszet(l1, l2);
+			List<int> l5 = Különbség(l1, l2);
+
+
+
+			return;
+
+
+
+			Console.WriteLine(string.Join(", ", l1));
 			//Maximumkiválasztásos_rendezés(lista, (x, y) => x.CompareTo(y));
 			//Beszúró_rendezés(lista, (x, y) => x.CompareTo(y));
 			//Gagyi_buborékos_rendezés(lista, (x, y) => x.CompareTo(y));
-			Gyorsrendezés(lista, (x, y) => x.CompareTo(y));
-			Console.WriteLine(string.Join(", ", lista));
+			Gyorsrendezés(l1, (x, y) => x.CompareTo(y));
+			Console.WriteLine(string.Join(", ", l1));
 
 			// rendezési szempont = comparator
 
