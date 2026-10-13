@@ -182,7 +182,44 @@ namespace _25f_Rendezesek
 
 		static List<int> Unió(List<int> A, List<int> B)
 		{
-			throw new NotImplementedException();
+			List<int> result = new List<int>(A.Count+B.Count);
+			int i = 0;
+			int j = 0;
+
+			while (i<A.Count && j<B.Count)
+			{
+				if (A[i] < B[j])
+				{
+					result.Add(A[i]);
+					i++;
+				}
+				else if (A[i] > B[j])
+				{
+					result.Add(B[j]);
+					j++;					
+				}
+				else
+				{
+					result.Add(A[i]);
+					i++;
+					result.Add(B[j]);
+					j++;
+				}
+			}
+
+			while (i < A.Count)
+			{
+				result.Add(A[i]);
+				i++;
+			}
+
+			while (j < B.Count)
+			{
+				result.Add(B[j]);
+				j++;
+			}
+
+			return result;
 		}
 
 		static List<int> Metszet(List<int> A, List<int> B)
