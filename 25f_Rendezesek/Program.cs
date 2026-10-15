@@ -164,19 +164,75 @@ namespace _25f_Rendezesek
 
 		#region összefésüléses rendezés
 
-		static void MergeSort(List<int> lista, int e, int v)
+		static void MergeSort<T>(List<T> lista, Func<T,T,int> c)
 		{
-			if (lista.Count <= 1)
+			T[] temp_tomb = new T[lista.Count]; // azért tömb, mert egyből ennyi eleme kellene legyen, ne üresen induljon!
+			MergeSort(lista, 0, lista.Count - 1, c , temp_tomb);
+		}
+
+		static void MergeSort<T>(List<T> lista, int e, int v, Func<T,T,int> c, T[] temp_lista)
+		{
+			if (e>=v)
 				return;
 
-			int k = lista.Count / 2;
-			MergeSort(lista, e, k);
-			MergeSort(lista, k+1, v);
-			Merge(lista, e, k, v);
+			int k = (e + v) / 2;
+			MergeSort(lista, e, k, c, temp_lista);
+			MergeSort(lista, k+1, v, c, temp_lista);
+			Merge(lista, e, k, v, c, temp_lista);
 		}
-		static void Merge(List<int> lista, int e, int k, int v)
+		static void Merge<T>(List<T> lista, int e, int k, int v, Func<T,T,int> c, T[] temp_tomb)
 		{
 
+			int i = e;
+			int j = k + 1;
+			int temp_i = e;
+
+			while (i<=k && j<=v)
+			{
+				if (c(lista[i],lista[j]) < 0)
+				{
+					temp_tomb[temp_i] = lista[i];
+					i++;
+					temp_i++;
+				}
+				else if (c(lista[i],lista[j]) > 0)
+				{
+					temp_tomb[temp_i] = lista[j];
+					j++;
+					temp_i++;
+				}
+				else // if (c(lista[i],lista[j]) == 0)
+				{
+					temp_tomb[temp_i] = lista[i];
+					i++;
+					temp_i++;
+
+					temp_tomb[temp_i] = lista[j];
+					j++;
+					temp_i++;
+
+				}
+			}
+
+			while (i<=k)
+			{
+				temp_tomb[temp_i] = lista[i];
+				i++;
+				temp_i++;
+			}
+
+			while (j <= v)
+			{
+				temp_tomb[temp_i] = lista[j];
+				j++;
+				temp_i++;
+			}
+
+			// visszamásoljuk a temp-ből
+			for (int index = e; index <= v; index++)
+			{
+				lista[index] = temp_tomb[index];
+			}
 		}
 		#endregion
 
@@ -246,16 +302,26 @@ namespace _25f_Rendezesek
 
 			List<int> l2 = new List<int> { 5, 8, 9, 3, 4, 5, 8, 3, 1, 2, 3, 4, 6, 8, 123, 34, 6, 234, 56, 1 };
 
-			Gyorsrendezés(l1, (x, y) => x.CompareTo(y));
-			Gyorsrendezés(l2, (x, y) => x.CompareTo(y));
+			Console.WriteLine(string.Join(", ", l1));
+			Console.WriteLine(string.Join(", ", l2));
 
-			List<int> l3 = Unió(l1, l2);
-			List<int> l4 = Metszet(l1, l2);
-			List<int> l5 = Különbség(l1, l2);
-
+			MergeSort(l1, (x, y) => x.CompareTo(y));
+			MergeSort(l2, (x, y) => x.CompareTo(y));
 
 
+			Console.WriteLine(string.Join(", ", l1));
+			Console.WriteLine(string.Join(", ", l2));
 			return;
+			List<int> l3 = Unió(l1, l2);
+			Console.WriteLine(string.Join(", ", l3));
+
+
+
+			//List<int> l4 = Metszet(l1, l2);
+			//List<int> l5 = Különbség(l1, l2);
+
+
+
 
 
 
